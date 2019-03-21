@@ -12,6 +12,13 @@ checkString = "checkString"
 checkString = "checkString 2"
 //endOfReminder
 
+enum LevelOfPosition {
+    case noChangeOfPosition
+    case changeOfPositionToValley
+    case changeOfPositionToMountain
+    case changeOfPosition
+}
+
 
 var stackString: String = "S"
 
@@ -20,27 +27,25 @@ func push(value: Character) {
     //value = "newValue"    // Error since a argument variable inside function is a let constant
     //endOfReminder
     stackString.append(value)
-    print("inside push \(stackString)")
-    
 }
 
 
-func check() -> Int {
+func check() -> LevelOfPosition {
     if stackString.count <= 2 {
-        return 0;
+        return .noChangeOfPosition;
     }
     if stackString[stackString.index(before: stackString.endIndex)] == "U" && stackString[stackString.index(stackString.endIndex, offsetBy: -2)] != "U"  {
         if stackString[stackString.index(stackString.endIndex, offsetBy: -3)] == "S" {
-            return 1
+            return .changeOfPositionToValley
         } else {
-            return 2
+            return .changeOfPosition
         }
     }
     else if stackString[stackString.index(before: stackString.endIndex)] == "D" && stackString[stackString.index(stackString.endIndex, offsetBy: -2)] != "D" {
-        return 2;
+        return .changeOfPosition;
     }
     else {
-        return 0
+        return .noChangeOfPosition
     }
 }
 
@@ -51,21 +56,20 @@ func pop() {
 
 func countingValleys(n: Int, seq: String) -> Int? {
     stackString = "S"
-    var count: Int = 0;
+    var countOfNoOfValley: Int = 0;
     print(seq)
     for i in 0..<n {
         push(value: seq[seq.index(seq.startIndex, offsetBy: i)])
         let checkValue = check()
-        if checkValue == 1 {
-            count += 1
+        if checkValue == .changeOfPositionToValley {
+            countOfNoOfValley += 1
         }
-        if checkValue == 1 || checkValue == 2 {
+        if checkValue == .changeOfPositionToValley || checkValue == .changeOfPosition || checkValue == .changeOfPositionToMountain {
             pop()
         }
-        print("ffin \(seq[seq.index(seq.startIndex, offsetBy: i)])")
     }
-    print("valleys count = \(count)")
-    return 0
+    return countOfNoOfValley
 }
 
-var ans: Int? = countingValleys(n: 6, seq: "DUDUDU")
+var ansCountOfNoOfValley = countingValleys(n: 6, seq: "DUDUDU")
+print("\(ansCountOfNoOfValley!)")
